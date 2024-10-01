@@ -1,0 +1,58 @@
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var searchEngine = document.getElementById('searchEngine').value;
+    var searchQuery = document.getElementById('searchQuery').value;
+    window.open(searchEngine + '?q=' + encodeURIComponent(searchQuery), '_blank');
+});
+
+// Función para cerrar sesión
+function cerrarSesion() {
+    alert('Sesión cerrada');
+    window.location.href = 'login.html';
+}
+
+// Función para mostrar/ocultar el submenú
+function toggleSubmenu() {
+    var submenu = document.getElementById('submenu');
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Script adicional para la funcionalidad del menú
+$(document).ready(function () {
+    $('.menu-icon').on('click', function () {
+        $('.menu ul').toggleClass('showing');
+    });
+});
+
+<form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+<a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Cerrar Sesión</a>
+
+<form asiton="{{route('login')}}" method="post">
+    @csrf
+    <div class="input-group mb-3">
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input type="text" name="email" class="form-control" placeholder="correo">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="password" name="password" class="form-control" placeholder="password">
+    </div>
+    <button type="submit" class="btn float-right login_btn">Ingresar</button>
+</form>
+
+@if (Route::has('login'))
+    @auth
+        <a href="{{ url('/dashboard') }}" class="text-sm">Dashboard</a>
+    @else
+        <a href="{{ route('login') }}">Login</a>
+        @if (Route::has('register'))
+            <a href="{{ route('register') }}">Register</a>
+        @endif
+    @endauth
+@endif
