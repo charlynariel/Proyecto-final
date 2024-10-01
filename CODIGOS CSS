@@ -1,0 +1,169 @@
+<title>Cuadro de Búsqueda</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        body {
+            background-image: url('https://img.freepik.com/vector-gratis/concepto-mundo-red-global-globo-tecnologia-mapa-continentes-lineas-conexion-puntos-puntos-diseno-planeta-datos-digitales-estilo-plano-simple-color-monocromatico_333792-95.jpg?t=st=1725686480~exp=1725690080~hmac=f675c54be0e1dd4ebb8c9e7ca0de3ce089958d20e2b34da7552acfd88242c5d8&w=740');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        .menu-icon {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%; /* Hace que la imagen sea redonda */
+            border: 2px solid #fff; /* Agrega un borde blanco alrededor de la imagen */
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .submenu a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 8px 0;
+            margin: 5px 0;
+        }
+
+        .submenu a:hover {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #e74c3c;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Estilo actualizado para el título */
+        h2 {
+            font-size: 42px; /* Tamaño de fuente más grande */
+            font-family: 'Roboto', sans-serif; /* Fuente moderna y legible */
+            color: #000; /* Color del texto en negro */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #fff; /* Sombra blanca para mayor contraste */
+            border: 2px solid #fff; /* Borde blanco */
+            display: inline-block; /* Ajusta el tamaño del borde al contenido */
+            padding: 10px; /* Espacio interno */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        .search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Estilo actualizado para el cuadro de búsqueda */
+        .search input[type="text"] {
+            width: 300px; /* Aumenta el tamaño del cuadro de búsqueda */
+            font-size: 16px; /* Aumenta el tamaño del texto dentro del cuadro de búsqueda */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Imagen del menú en la esquina -->
+    <img src="{{ asset('icono.01.ico') }}" alt="Menu" class="menu-icon" onclick="toggleSubmenu()">
+
+    <div class="submenu" id="submenu">
+    <!-- Agregamos un formulario para cerrar sesión -->
+    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <!-- Botón para cerrar sesión -->
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Cerrar Sesión</a>
+</div> <div class="submenu" id="submenu">
+    <a href="{{{route('login')}}}" onclick="cerrarSesion()">Cerrar Sesión</a>
+    </div>
+
+    <!-- Contenido principal centrado -->
+    <div class="content">
+        <h2>Cuadro de Búsqueda</h2>
+        <form id="searchForm" method="get" target="_blank">
+            <div class="search">
+                <input type="text" id="searchQuery" name="q" class="form-control input-sm" maxlength="64" placeholder="Buscar..." />
+                <select id="searchEngine" class="form-control input-sm" style="width: auto; display: inline-block;">
+                    <option value="https://www.google.com/search">Google</option>
+                    <option value="https://www.bing.com/search">Bing</option>
+                    <option value="https://www.you.com/search">You.com</option>
+                    <option value="https://chat.openai.com/chat">ChatGPT</option>
+                    <option value="https://www.yahoo.com/search">Yahoo</option>
+                    <option value="https://www.ask.com/web">Ask</option>
+                    <option value="https://www.baidu.com/s">Baidu</option>
+                    <option value="https://www.ecosia.org/search">Ecosia</option>
+                    <option value="https://www.linkedin.com/">LinkedIn</option>
+                    <option value="https://www.reddit.com/">Reddit</option>
+                    <option value="https://www.tumblr.com/">Tumblr</option>
+                    <option value="https://www.weibo.com/">Weibo</option>
+                    <option value="https://www.vk.com/">VK</option>
+                    <option value="https://www.discord.com/">Discord</option>
+
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    
+
+    <script>
+        // Función para manejar la selección del motor de búsqueda
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var searchEngine = document.getElementById('searchEngine').value;
+            var searchQuery = document.getElementById('searchQuery').value;
+            window.open(searchEngine + '?q=' + encodeURIComponent(searchQuery), '_blank');
+        });
+
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            alert('Sesión cerrada');
+            window.location.href = 'login.html';
+        }
+
+        // Función para mostrar/ocultar el submenú
+        function toggleSubmenu() {
+            var submenu = document.getElementById('submenu');
+            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
